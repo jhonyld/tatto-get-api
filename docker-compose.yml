@@ -1,10 +1,29 @@
 version: "3" ## especifica a versão do docker-compose file
 
 services: ## Define um serviço
-  app: ## nome do serviço
+  api: ## nome do serviço
+    container_name: api-compose
     build: . ## localização do dockerfile
     command: npm start ## comando a executar
+    depends_on: 
+      - postgres
+    environment: 
+      DATABASE_URL: postgres://postgres:password@postgres:5432/test  
+      PORT: 21000
     ports:
-      - "3000:3000" ## redirecionamento de porta quando chegar alguma requisição na porta 3000 chama o container na porta 3000
+      - "21000:21000" ## redirecionamento de porta quando chegar alguma requisição na porta 3000 chama o container na porta 3000
     volumes:
       - .:/usr/app ## monitoro a pasta atual . e envio as alterações para /usr/app
+
+  postgres:
+    container_name: postgres-compose
+    image: jhonyld/postgres:0.0.1
+    restart: unless-stopped
+    ports: 
+      - "5432:5432"
+    environment: 
+      POSTGRES_DB: test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+
