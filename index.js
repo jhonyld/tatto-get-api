@@ -39,6 +39,22 @@ app.post('/api/v1/artista',(req,res) => {
     );
 });
 
+app.get("/api/v1/artistaCategoria/:id",(req,res) => {
+    pool.query(
+        "SELECT CA.DSC_CATEGORIA " +
+        "FROM CATEGORIAS CA " +
+        "JOIN ARTISTA_CATEGORIA AC ON AC.SEQ_CATEGORIA = CA.SEQ_CATEGORIA AND AC.SEQ_ARTISTA = $1",
+        [id],
+        (error,results) => {
+            if(error){
+                throw error;
+            }
+
+            res.status(200).json(results.rows);
+        }
+    );
+});
+
 //Buscar todos
 app.get("/api/v1/artista",(req,res) => {
     pool.query(
@@ -103,3 +119,4 @@ app.delete("/api/v1/artista/:id" ,(req,res) => {
         res.sendStatus(200);
     });
 });
+
